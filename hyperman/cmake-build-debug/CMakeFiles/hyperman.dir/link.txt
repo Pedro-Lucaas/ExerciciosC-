@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/hyperman.dir/A.cpp.o  -o hyperman 
