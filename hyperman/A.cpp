@@ -26,23 +26,23 @@ public:
 
 
 
-int recursiveF(shared_ptr<nodeG> root, int power){
+int recursiveF(shared_ptr<nodeG> item){
     int kill = 0;
-    auto tmp = root;
-    for (power; power > 0 ; --power) {
-        int k = 0;
-        while ( root->childPtr[k]->height != root->height-1){
-            k++;
-        }
-
-        root->height = 0;
-        for (auto &item : root->childPtr) {
-            if (item->height > root->height) {
-                root->height = item->height + 1;
-            }
-        }
+    int tmpH = 0;
+    if (item->dad == nullptr){
+        return kill;
     }
 
+    if(item->height!=0){
+        tmpH = item->height+1;
+        item->height = 0;
+        kill++;
+    }
+    if (item->dad->height > tmpH){
+        return kill;
+    }
+
+    kill = kill + recursiveF(item->dad);
 
     return kill;
 }
@@ -104,23 +104,25 @@ int main(){
         i++;
     }
 
-    int kills;
+    int kills = 0;
     for (i=1; i<=chef;i++){
         if(vecNode[i]->size == 0){
             vecLeaf.push_back(vecNode[i]);
         }
     }
+    vector<int> vecKills (vecLeaf.size());
+    i=0;
     for (auto &item : vecLeaf){
-        while(item->dad!= nullptr){
-            if(item->height!=0){
-                item->height = 0;
-                kills+=1;
-            }
-            item = item->dad;
-        }
+        vecKills[i] = recursiveF(item);
+            i++;
     }
-
-    cout << kills << endl;
+    stable_sort(vecKills.begin(), vecKills.end());
+    i=vecKills.size()-1;
+    for (int j = 0; j < power; ++j) {
+        kills +=  vecKills[i];
+        i--;
+    }
+    cout << kills+1 << endl;
 #ifdef LOCAL
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     std::cout << "Time = " << std::chrono::duration_cast<std::chrono::microseconds>(end-begin).count() << endl;
