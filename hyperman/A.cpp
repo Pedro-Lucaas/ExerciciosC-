@@ -109,5 +109,4 @@ int main(){
     std::cout << "Time = " << std::chrono::duration_cast<std::chrono::microseconds>(end-begin).count() << endl;
 #endif
     cout << kills << endl;
-   return 0;
 }
